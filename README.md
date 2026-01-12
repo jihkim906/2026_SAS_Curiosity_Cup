@@ -57,7 +57,7 @@ $$ \log \left( \frac{P(\text{Aggressive})}{1 - P(\text{Aggressive})} \right) = \
 
 #### Response Profile
 
-| Outcome | is_aggressive_num | Frequency |
+| Outcome | is_aggressive_num | Count |
 |------|------------------|-----------|
 | Aggressive | 1 | 55 |
 | Non-aggressive | 0 | 14 |
