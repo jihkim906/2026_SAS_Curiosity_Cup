@@ -1,7 +1,7 @@
 # Detection of Aggressive Driving Events Using Smartphone Sensor Data (SAS)
 
 ## Project Overview
-This project demonstrates how frequency-domain features derived from smartphone motion sensors can effectively detect aggressive driving behavior using classical statistical modeling in SAS. While machine learning approaches such as decision trees, random forests, and support vector machines have been shown to achieve higher classification performance (AUC ≈ 0.98; Ferreira et al., 2017), these models often offer limited interpretability regarding how individual features contribute to driving risk.
+This project demonstrates how frequency-domain features derived from smartphone motion sensors can effectively detect aggressive driving behavior using classical statistical modelling in SAS. While machine learning approaches such as decision trees, random forests, and support vector machines have been shown to achieve higher classification performance (AUC ≈ 0.98; Ferreira et al., 2017), these models often offer limited interpretability regarding how individual features contribute to driving risk.
 
 In this project, frequency-domain information is extracted from time-domain sensor signals using the Fast Fourier Transform (FFT). Spectral features are then derived to capture both the intensity and dominant frequency characteristics of motion. These features are used as covariates in a logistic regression model, allowing direct interpretation of covariate effects through estimated coefficients and odds ratios.
 
@@ -39,7 +39,7 @@ Axis-level features are aggregated to form four event-level predictors:
 ---
 
 
-## Statistical Modeling
+## Statistical Modelling
 
 Driving behavour (aggressive vs non-aggresive) is modelled using binary logistic regression.
 
