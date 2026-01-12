@@ -38,9 +38,6 @@ Axis-level features are aggregated to form four event-level predictors:
 ---
 
 
-
----
-
 ## Statistical Modeling
 
 Driving behavour (aggressive vs non-aggresive) is modelled using binary logistic regression.
@@ -138,9 +135,6 @@ Overall, aggressive driving events are characterized by strong and abrupt rotati
 This framework is applicable to:
 - Usage-based insurance and telematics  
 - Safety monitoring and driver risk scoring
----
-
-
 ---
 
 ## Future Work
