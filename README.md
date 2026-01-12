@@ -125,16 +125,19 @@ where:
 
 ## Interpretation
 
-- **Gyroscope spectral energy**: Higher rotational energy strongly increases the odds of aggressive driving, reflecting abrupt steering or rotational movements.
-- **Accelerometer spectral centroid**: Aggressive events are associated with lower dominant acceleration frequencies, consistent with large, sustained motion rather than rapid oscillations.
-- **Gyroscope spectral centroid**: Higher dominant rotational frequencies substantially increase aggression odds, consistent with sharp turns and lane changes.
+- **Gyroscope spectral energy**: Events with more intense rotational motion, such as abrupt steering corrections or sudden changes in direction, are much more likely to be classified as aggressive driving
+
+- **Accelerometer spectral centroid**: Aggressive events tend to involve slower but larger acceleration changes, such as hard braking or rapid acceleration, rather than small, high-frequency vibrations
+
+- **Gyroscope spectral centroid**: Higher-frequency rotational motion is strongly associated with aggressive driving, reflecting sharp turns, quick lane changes, or sudden steering inputs
+
+Overall, aggressive driving events are characterized by strong and abrupt rotational movements, combined with large, sustained acceleration changes rather than small, rapid vibrations. This pattern is consistent with real-world behaviors such as sharp steering, quick lane changes, and hard braking or acceleration, and helps explain why information from the gyroscope plays a dominant role in distinguishing aggressive from non-aggressive driving.
 
 ---
 ## Applications
 This framework is applicable to:
 - Usage-based insurance and telematics  
 - Safety monitoring and driver risk scoring
-
 ---
 
 
@@ -142,7 +145,7 @@ This framework is applicable to:
 
 ## Future Work
 ---
-
+- **Larger diverse datasets**: Evaluating the model on larger, multi-driver datasets would improve statistical power and allow assessment of generalizability across driving styles, road conditions, and device placements.
 ---
 
 ## References
