@@ -10,7 +10,7 @@ Many existing approaches rely on complex machine-learning models that can be dif
 ---
 
 ## Data Description
-The analysis uses a publicly available smartphone driving dataset collected during four real-world driving trips.
+The analysis uses a publicly available smartphone driving dataset collected during four real-world driving trips. The dataset contains high-frequency inertial sensor recordings paired with manually annotated driving events, and has been used in prior research on driver behavior profiling.
 
 - **Total events**: 69  
 - **Aggressive events**: braking, acceleration, turns, lane changes  
@@ -20,7 +20,9 @@ The analysis uses a publicly available smartphone driving dataset collected duri
   - Gyroscope (x, y, z)
 - **Sampling rate**: approximately 50 Hz (standardized during preprocessing)
 
-Each event is labeled using manually annotated start and end times and is treated as an independent observation.
+Each event is labeled using ground-truth start and end times and is treated as an independent observation. A detailed description of the data collection protocol, sensor characteristics, and event definitions is available in the original dataset repository:
+
+- **Driver Behavior Dataset**: https://github.com/jair-jr/driverBehaviorDataset
 
 ---
 
