@@ -74,12 +74,6 @@ The final modeling dataset contains 69 events with the following class distribut
 | Aggressive | 1 | 55 |
 | Non-aggressive | 0 | 14 |
 
-The modeled probability is:
-
-$$
-P(\text{Aggressive Event})
-$$
-
 ---
 
 ### Model Fit and Global Significance
