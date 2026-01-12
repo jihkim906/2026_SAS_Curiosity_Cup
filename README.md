@@ -17,9 +17,6 @@ The final model achieves an AUC of approximately 0.94, with all retained covaria
   - 3-axis gyroscope (x, y, z)
 - **Sampling rate**: ~ 50 Hz
 - **Observation unit**: Event-level time windows
-
-- **Driver Behavior Dataset**: https://github.com/jair-jr/driverBehaviorDataset
-
 ---
 
 ## Frequency-Domain Feature Engineering
@@ -29,7 +26,7 @@ Each sensor asix is transformed from time-domain to frequency-domain using the *
 For each axis, two features are extracted:
 
 - **Spectral energy**: captures overall motion intensity
-- **Spectral centroid**: represents the dominant frequency content of the signal
+- **Spectral centroid**: captures the dominant frequency of motion, indicating whether movement is slow and sustained or rapid and oscillatory
 
 Axis-level features are aggregated to form four event-level predictors:
 
