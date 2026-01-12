@@ -40,19 +40,26 @@ This standardization enables consistent frequency-domain analysis across events.
 ---
 
 ### Frequency-Domain Feature Engineering
-For each sensor axis, the resampled signal is demeaned and transformed to the frequency domain using a discrete Fourier transform implemented directly in SAS.
 
-From the FFT output, two features are computed:
-- **Total spectral energy** (sum of power across frequencies)
-- **Spectral centroid** (power-weighted average frequency)
+To characterize driving behavior beyond raw time-domain signals, sensor data are transformed into the frequency domain using the Fast Fourier Transform (FFT). The FFT decomposes a time-series signal into a set of frequency components, allowing motion patterns to be described in terms of their dominant frequencies and overall intensity. This representation is particularly useful for distinguishing aggressive maneuvers, which often exhibit characteristic low- to mid-frequency motion with large amplitudes.
 
-Axis-level features are aggregated to create four event-level predictors:
+For each sensor axis, the resampled signal is demeaned and transformed to the frequency domain using a discrete Fourier transform.
+
+From the FFT output, two summary features are computed:
+
+- **Total spectral energy**:  
+  Defined as the sum of squared magnitudes of the Fourier coefficients across frequencies. This feature captures the overall intensity of dynamic motion during an event.
+
+- **Spectral centroid**:  
+  Defined as the power-weighted average frequency, representing the dominant frequency content of the signal. Lower centroid values correspond to slower, sustained movements, while higher values indicate more rapid oscillatory motion.
+
+Axis-level features are then aggregated to create four event-level predictors:
 1. Total accelerometer spectral energy  
 2. Total gyroscope spectral energy  
 3. Dominant accelerometer spectral centroid  
 4. Dominant gyroscope spectral centroid  
 
-Log transformations are applied to stabilize scale and improve model fit.
+Log transformations are applied to these features to stabilize scale differences and improve model fit in subsequent logistic regression analyses.
 
 ---
 
