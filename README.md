@@ -17,6 +17,7 @@ The final model achieves an AUC of approximately 0.94, with all retained covaria
   - 3-axis gyroscope (x, y, z)
 - **Sampling rate**: ~ 50 Hz
 - **Observation unit**: Event-level time windows
+
 ---
 
 ## Frequency-Domain Feature Engineering
@@ -131,15 +132,19 @@ where:
 Overall, aggressive driving events are characterized by strong and abrupt rotational movements, combined with large, sustained acceleration changes rather than small, rapid vibrations. This pattern is consistent with real-world behaviors such as sharp steering, quick lane changes, and hard braking or acceleration, and helps explain why information from the gyroscope plays a dominant role in distinguishing aggressive from non-aggressive driving.
 
 ---
+
 ## Applications
 This framework is applicable to:
 - Usage-based insurance and telematics  
 - Safety monitoring and driver risk scoring
+
 ---
 
 ## Future Work
 ---
+
 - **Larger diverse datasets**: Evaluating the model on larger, multi-driver datasets would improve statistical power and allow assessment of generalizability across driving styles, road conditions, and device placements.
+
 ---
 
 ## References
