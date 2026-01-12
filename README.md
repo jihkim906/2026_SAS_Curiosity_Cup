@@ -41,7 +41,7 @@ This standardization enables consistent frequency-domain analysis across events.
 For each sensor axis, the resampled signal is demeaned and transformed to the frequency domain using a discrete Fourier transform implemented directly in SAS.
 
 From the FFT output, two features are computed:
-- **Total spectral energy** (sum of power across frequencies, excluding the DC component)
+- **Total spectral energy** (sum of power across frequencies)
 - **Spectral centroid** (power-weighted average frequency)
 
 Axis-level features are aggregated to create four event-level predictors:
