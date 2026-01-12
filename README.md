@@ -48,6 +48,11 @@ The final model includes:
 - Log accelerometer spectral centroid
 - Log gyroscope spectral centroid
 
+The proposed model is:
+
+$$ \log \left( \frac{P(\text{Aggressive})}{1 - P(\text{Aggressive})} \right) = \beta_0 + \beta_1 \cdot \log(E_{\text{gyro}}) + \beta_2 \cdot \log(C_{\text{accel}}) + \beta_3 \cdot \log(C_{\text{gyro}}) $$
+
+
 ### SAS outputs
 
 #### Response Profile
