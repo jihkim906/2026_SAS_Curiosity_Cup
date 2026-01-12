@@ -10,7 +10,7 @@ The final model achieves an AUC of approximately 0.94, with all retained covaria
 ---
 
 ## Data Description
-- **Dataset**: [Public smartphone driving dataset](https://github.com/jair-jr/driverBehaviorDataset) 
+- **Dataset**: [Driver Behavior Dataset](https://github.com/jair-jr/driverBehaviorDataset) 
 - **Events**: 69 total (aggresive vs non-aggresive) 
 - **Sensors**:
   - 3-axis accelerometer (x, y, z)
@@ -115,15 +115,35 @@ where:
 
 ---
 
-**Interpretation**:
+## Key Results
+- Despite a relatively small sample size (n = 64), the model clearly distinguishes between aggressive and non-aggressive driving events
+- **Global model significance**: the logistic regression model is statistically significant at the 5% level
+- **Classification performation** : strong discriminative ability with an Area Under the ROC Curve (AUC) of approximately 0.94
+    
+
+---
+
+## Interpretation
+
 - **Gyroscope spectral energy**: Higher rotational energy strongly increases the odds of aggressive driving, reflecting abrupt steering or rotational movements.
 - **Accelerometer spectral centroid**: Aggressive events are associated with lower dominant acceleration frequencies, consistent with large, sustained motion rather than rapid oscillations.
 - **Gyroscope spectral centroid**: Higher dominant rotational frequencies substantially increase aggression odds, consistent with sharp turns and lane changes.
 
+---
 ## Applications
 This framework is applicable to:
 - Usage-based insurance and telematics  
 - Safety monitoring and driver risk scoring
+
+---
+
+
+---
+
+## Future Work
+---
+
+---
 
 ## References
 
