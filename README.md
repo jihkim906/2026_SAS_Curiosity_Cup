@@ -119,7 +119,7 @@ where:
 ---
 
 ## Key Results
-- Despite a relatively small sample size (n = 64), the model clearly distinguishes between aggressive and non-aggressive driving events
+- Despite a relatively small sample size (n = 69), the model clearly distinguishes between aggressive and non-aggressive driving events
 - **Global model significance**: the logistic regression model is statistically significant at the 5% level
 - **Classification performation** : strong discriminative ability with an Area Under the ROC Curve (AUC) of approximately 0.94
     
