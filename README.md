@@ -22,7 +22,7 @@ The final model achieves an AUC of approximately 0.94, with all retained covaria
 
 ## Frequency-Domain Feature Engineering
 
-Each sensor asix is transformed from time-domain to frequency-domain using the **Fast Fourier Transform (FFT)**. The FFT represents motion in terms of its frequency content, which is informative for distinguishing aggressive maneuvers such as hard braking, sharp turns, and lane changes.
+Each sensor axis is transformed from time-domain to frequency-domain using the **Fast Fourier Transform (FFT)**. The FFT represents motion in terms of its frequency content, which is informative for distinguishing aggressive maneuvers such as hard braking, sharp turns, and lane changes.
 
 For each axis, two features are extracted:
 
