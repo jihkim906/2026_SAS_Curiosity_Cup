@@ -7,7 +7,7 @@ This project was developed for **The Curiosity Cup 2026 – A Global SAS Student
 
 This project is exclusively implemented in SAS, including data processing, statistical modelling, and performance evaluation.
 
-We proposed an interpretable statistical framework for detecting aggressive driving behavior using smartphone motion sensors. While the study by Ferreira et al. (2017), [*Driver Behavior Profiling: An Investigation with Different Smartphone Sensors and Machine Learning*](https://doi.org/10.1371/journal.pone.0174959), demonstrates strong performance using machine learning (AUC ≈ 0.98), many approaches operate as black-box classifiers.
+We proposed an interpretable statistical framework for detecting aggressive driving behavior using smartphone motion sensors. While the study by Ferreira et al. (2017), [*Driver Behavior Profiling: An Investigation with Different Smartphone Sensors and Machine Learning*](https://doi.org/10.1371/journal.pone.0174959), demonstrates strong performance using machine learning, many approaches operate as black-box classifiers.
 
 Our objective is to retain strong predictive performance while explicitly quantifying how motion dynamics contribute to aggressive driving risk.
 
