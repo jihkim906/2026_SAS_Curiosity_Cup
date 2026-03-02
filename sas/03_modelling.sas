@@ -1,59 +1,61 @@
-/* Logistic models (raw 4 features + log-scale) */
+/* Modeling with PROC GLIMMIX */
 
-/* Model 1: raw 4-feature set */
-ods output
-  ParameterEstimates = work.parms_fft4;
-
-proc logistic data=work.model_fft_4feature descending;
-  model is_aggressive_num =
-      accel_fft_energy_total
-      gyro_fft_energy_total
-      accel_fft_centroid_hz
-      gyro_fft_centroid_hz;
-  roc;
+/* Ensure ordering for repeated structure */
+proc sort data=work.model_fft_4feature_win;
+  by event_id window_index;
 run;
 
-/* Create log-scaled features */
-data work.model_fft_4feature_log;
-  set work.model_fft_4feature;
+/* Create numeric outcome and log-scaled features */
+data work.model_fft_4feature_win_glm;
+  set work.model_fft_4feature_win;
 
+  /* binary numeric */
+  is_aggressive_num = (is_aggressive=1);
+
+  /* log-scaled energies */
   log_accel_fft_energy = log(1 + accel_fft_energy_total);
   log_gyro_fft_energy  = log(1 + gyro_fft_energy_total);
 
-  log_accel_fft_centroid = log(accel_fft_centroid_hz);
-  log_gyro_fft_centroid  = log(gyro_fft_centroid_hz);
+  /* non-positive centroids */
+  if accel_fft_centroid_hz > 0 then log_accel_fft_centroid = log(accel_fft_centroid_hz);
+  else log_accel_fft_centroid = .;
 
-  label
-    log_accel_fft_energy   = "Log total acceleration spectral energy"
-    log_gyro_fft_energy    = "Log total gyroscope spectral energy"
-    log_accel_fft_centroid = "Log acceleration spectral centroid (Hz)"
-    log_gyro_fft_centroid  = "Log gyroscope spectral centroid (Hz)";
+  if gyro_fft_centroid_hz > 0 then log_gyro_fft_centroid = log(gyro_fft_centroid_hz);
+  else log_gyro_fft_centroid = .;
 run;
 
 
-/* Model 2: log-scaled 4-feature set */
-ods output
-  ParameterEstimates = work.parms_fft4_log;
+ods output SolutionF = work.glmm_log_solutionf
+           FitStatistics = work.glmm_log_fit;
 
-proc logistic data=work.model_fft_4feature_log descending;
-  model is_aggressive_num =
+
+proc glimmix data=work.model_fft_4feature_win_glm method=laplace;
+  class event_id;
+
+  model is_aggressive(event='1') =
       log_accel_fft_energy
       log_gyro_fft_energy
       log_accel_fft_centroid
-      log_gyro_fft_centroid;
-  roc;
+      log_gyro_fft_centroid
+    / dist=binomial link=logit solution;
+
+  random intercept / subject=event_id;
+
+  /* Predicted probability of event='1' */
+  output out=work.glmm_pred pred(ilink)=p_glmm;
 run;
 
 
-/* Model 3: reduced log model */
-ods output
-  ParameterEstimates = work.parms_fft4_log_red;
-
-proc logistic data=work.model_fft_4feature_log descending;
-  model is_aggressive_num =
-      log_gyro_fft_energy
-      log_accel_fft_centroid
-      log_gyro_fft_centroid;
-  roc;
+/* AUC / ROC using predicted probabilities */
+proc logistic data=work.glmm_pred;
+  model is_aggressive(event='1') = p_glmm / nofit;
+  roc 'GLIMMIX score' pred=p_glmm;
+  ods output ROCAssociation=work.auc_glmm;
 run;
+
+/* Print AUC */
+proc print data=work.auc_glmm noobs; run;
+
+
+
 

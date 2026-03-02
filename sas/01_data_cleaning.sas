@@ -1,5 +1,10 @@
-/* Data cleaning + event labeling (trips 1–4) */
+/* Data cleaning + event labeling (trips 1–4) + RAW sliding windows */
+
 %let curiosity_path = /home/u64244912/curiosity;
+
+/* RAW sliding window settings */
+%let N   = 128;   /* FFT window length in rows */
+%let HOP = 10;     /* slide by 10 sample */
 
 options validvarname=v7 nodate nonumber;
 
@@ -39,8 +44,9 @@ run;
     set work.gt_&trip_num._raw;
 
     length start_sec end_sec 8;
+
     if not missing(_inicio) then start_sec=_inicio;
-    else if not missing(inicio) then start_sec=_inicio;
+    else if not missing(inicio) then start_sec=inicio;   /* FIX */
 
     if not missing(_fim) then end_sec=_fim;
     else if not missing(fim) then end_sec=fim;
@@ -114,7 +120,6 @@ run;
     select
       g.trip_id,
       cats('T',g.trip_id,'_C',g.event_classifier,'_S',put(g.start_sec,best.),'_E',put(g.end_sec,best.)) as event_id length=60,
-      g.event_classifier,
       g.event_type,
       g.is_aggressive,
       s.seconds_from_start,
@@ -129,7 +134,7 @@ run;
 
 %mend;
 
-/* Trips 1–4 -> master dataset */
+/* Trips 1–4 to master dataset */
 %ProcessTrip(1);
 %ProcessTrip(2);
 %ProcessTrip(3);
@@ -138,3 +143,86 @@ run;
 data work.master_event_data;
   set work.events_1 work.events_2 work.events_3 work.events_4;
 run;
+
+/* Raw sliding windows */
+
+/* Ensure ordering inside each event */
+proc sort data=work.master_event_data;
+  by event_id seconds_from_start;
+run;
+
+/* Create 0-based raw index within each event: idx0 = 0,1,2,... */
+data work.master_event_data_idx;
+  set work.master_event_data;
+  by event_id;
+
+  if first.event_id then idx0 = -1;
+  idx0 + 1;
+
+  keep event_id event_type is_aggressive idx0
+       accel_x accel_y accel_z gyro_x gyro_y gyro_z;
+run;
+
+/* Event lengths */
+proc sql;
+  create table work.event_len as
+  select
+    event_id,
+    max(event_type) as event_type length=35,
+    max(is_aggressive) as is_aggressive,
+    count(*) as n_rows
+  from work.master_event_data_idx
+  group by event_id;
+quit;
+
+/* Expand windows directly to long format:
+   window_index = 1..nwin per event
+   idx          = 0..N-1 within window (FFT index)
+   idx0         = start_idx0 + idx (raw row index) */
+data work.window_grid_min;
+  set work.event_len;
+
+  if n_rows >= &N then do;
+    nwin = floor((n_rows - &N) / &HOP) + 1;
+
+    do window_index = 1 to nwin;
+      start_idx0 = (window_index - 1) * &HOP;
+
+      do idx = 0 to %eval(&N-1);
+        idx0 = start_idx0 + idx;
+        output;
+      end;
+    end;
+  end;
+
+  keep event_id event_type is_aggressive window_index idx idx0;
+run;
+
+/* Join raw sensor values; final dataset */
+proc sql;
+  create table work.longitudinal_fft_long as
+  select
+    g.event_id,
+    g.window_index,
+    g.idx,
+    g.event_type,
+    g.is_aggressive,
+    d.accel_x, d.accel_y, d.accel_z,
+    d.gyro_x,  d.gyro_y,  d.gyro_z
+  from work.window_grid_min g
+  inner join work.master_event_data_idx d
+    on g.event_id = d.event_id
+   and g.idx0     = d.idx0
+  order by event_id, window_index, idx;
+quit;
+
+
+
+proc sql;
+select
+  event_id,
+  max(window_index) as n_subsamples
+from work.longitudinal_fft_long
+group by event_id
+order by n_subsamples;
+

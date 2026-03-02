@@ -1,122 +1,63 @@
-/* Feature engineering from work.master_event_data (resample -> FFT -> 4 features) */
+/* FFT feature engineering from work.longitudinal_fft_long */
 
 /* FFT settings */
 %let fs = 50;      /* target sampling rate (Hz) */
 %let N  = 128;     /* fixed length (power of 2) */
 
-
-/* Event-level metadata (t0 = event start) */
-proc sort data=work.master_event_data; by event_id; run;
-
-proc sql;
-  create table work.event_meta as
-  select
-    event_id,
-    max(trip_id) as trip_id,
-    max(event_classifier) as event_classifier,
-    max(event_type) as event_type length=35,
-    max(is_aggressive) as is_aggressive,
-    min(seconds_from_start) as t0
-  from work.master_event_data
-  group by event_id;
-quit;
-
-
-/* Bin-average onto uniform grid: idx = 0..N-1 */
-data work.binned_long;
-  merge work.master_event_data(in=a)
-        work.event_meta(in=b keep=event_id t0);
-  by event_id;
-  if a and b;
-
-  idx = floor((seconds_from_start - t0) * &fs);
-  if 0 <= idx < &N;
-
-  keep event_id idx accel_x accel_y accel_z gyro_x gyro_y gyro_z;
+/* Sort */
+proc sort data=work.longitudinal_fft_long;
+  by event_id window_index idx;
 run;
 
-proc sql;
-  create table work.binned_mean as
-  select
-    event_id,
-    idx,
-    mean(accel_x) as accel_x,
-    mean(accel_y) as accel_y,
-    mean(accel_z) as accel_z,
-    mean(gyro_x)  as gyro_x,
-    mean(gyro_y)  as gyro_y,
-    mean(gyro_z)  as gyro_z
-  from work.binned_long
-  group by event_id, idx
-  order by event_id, idx;
-quit;
-
-
-/* Full grid per event + zero-fill missing bins */
-data work.event_grid;
-  set work.event_meta(keep=event_id);
-  do idx = 0 to %eval(&N-1);
-    output;
-  end;
-run;
-
-proc sql;
-  create table work.grid_join as
-  select
-    g.event_id,
-    g.idx,
-    coalesce(b.accel_x,0) as accel_x,
-    coalesce(b.accel_y,0) as accel_y,
-    coalesce(b.accel_z,0) as accel_z,
-    coalesce(b.gyro_x,0)  as gyro_x,
-    coalesce(b.gyro_y,0)  as gyro_y,
-    coalesce(b.gyro_z,0)  as gyro_z
-  from work.event_grid g
-  left join work.binned_mean b
-    on g.event_id=b.event_id and g.idx=b.idx
-  order by g.event_id, g.idx;
-quit;
-
-
-/* Transpose each axis to wide (one row per event_id) */
-%macro ToWide(var=, out=);
-proc transpose data=work.grid_join out=&out(drop=_name_) prefix=&var._;
-  by event_id;
+/* Transpose each axis to wide: one row per (event_id, window_index) */
+%macro ToWideEW(var=, out=);
+proc transpose data=work.longitudinal_fft_long out=&out(drop=_name_) prefix=&var._;
+  by event_id window_index;
   id idx;
   var &var;
 run;
 %mend;
 
-%ToWide(var=accel_x, out=work.w_accel_x);
-%ToWide(var=accel_y, out=work.w_accel_y);
-%ToWide(var=accel_z, out=work.w_accel_z);
-%ToWide(var=gyro_x,  out=work.w_gyro_x);
-%ToWide(var=gyro_y,  out=work.w_gyro_y);
-%ToWide(var=gyro_z,  out=work.w_gyro_z);
+%ToWideEW(var=accel_x, out=work.w_accel_x);
+%ToWideEW(var=accel_y, out=work.w_accel_y);
+%ToWideEW(var=accel_z, out=work.w_accel_z);
+%ToWideEW(var=gyro_x,  out=work.w_gyro_x);
+%ToWideEW(var=gyro_y,  out=work.w_gyro_y);
+%ToWideEW(var=gyro_z,  out=work.w_gyro_z);
 
+/* Create window-level metadata (one row per event_id, window_index) */
+proc sql;
+  create table work.win_meta as
+  select distinct
+    event_id,
+    window_index,
+    event_type,
+    is_aggressive
+  from work.longitudinal_fft_long;
+quit;
 
-/* Merge wide axes + event labels */
-proc sort data=work.event_meta; by event_id; run;
-proc sort data=work.w_accel_x;  by event_id; run;
-proc sort data=work.w_accel_y;  by event_id; run;
-proc sort data=work.w_accel_z;  by event_id; run;
-proc sort data=work.w_gyro_x;   by event_id; run;
-proc sort data=work.w_gyro_y;   by event_id; run;
-proc sort data=work.w_gyro_z;   by event_id; run;
+proc sort data=work.win_meta;   by event_id window_index; run;
+proc sort data=work.w_accel_x;  by event_id window_index; run;
+proc sort data=work.w_accel_y;  by event_id window_index; run;
+proc sort data=work.w_accel_z;  by event_id window_index; run;
+proc sort data=work.w_gyro_x;   by event_id window_index; run;
+proc sort data=work.w_gyro_y;   by event_id window_index; run;
+proc sort data=work.w_gyro_z;   by event_id window_index; run;
 
-data work.event_wide;
-  merge work.event_meta
+/* Merge wide axes + window labels */
+data work.win_wide;
+  merge work.win_meta(in=a)
         work.w_accel_x work.w_accel_y work.w_accel_z
         work.w_gyro_x  work.w_gyro_y  work.w_gyro_z;
-  by event_id;
+  by event_id window_index;
+  if a;
 run;
 
+/* FFT energy + spectral centroid per axis */
+%macro ComputeFFTEnergyCentroidEW(axis=);
 
-/* FFT energy + spectral centroid per axis (demean; exclude DC only) */
-%macro ComputeFFTEnergyCentroid(axis=);
-
-data work.event_wide;
-  set work.event_wide;
+data work.win_wide;
+  set work.win_wide;
 
   array x[0:%eval(&N-1)] &axis._0 - &axis._%eval(&N-1);
 
@@ -165,28 +106,27 @@ run;
 
 %mend;
 
-/* apply to all 6 axes */
-%ComputeFFTEnergyCentroid(axis=accel_x);
-%ComputeFFTEnergyCentroid(axis=accel_y);
-%ComputeFFTEnergyCentroid(axis=accel_z);
+/* Apply to all 6 axes */
+%ComputeFFTEnergyCentroidEW(axis=accel_x);
+%ComputeFFTEnergyCentroidEW(axis=accel_y);
+%ComputeFFTEnergyCentroidEW(axis=accel_z);
 
-%ComputeFFTEnergyCentroid(axis=gyro_x);
-%ComputeFFTEnergyCentroid(axis=gyro_y);
-%ComputeFFTEnergyCentroid(axis=gyro_z);
+%ComputeFFTEnergyCentroidEW(axis=gyro_x);
+%ComputeFFTEnergyCentroidEW(axis=gyro_y);
+%ComputeFFTEnergyCentroidEW(axis=gyro_z);
 
+/* Final 4 feature analytical dataset */
+data work.model_fft_4feature_win;
+  set work.win_wide;
 
-/* Final 4-feature dataset */
-data work.model_fft_4feature;
-  set work.event_wide;
-
-  is_aggressive_num = (is_aggressive=1);
-
+  /* total energies */
   accel_fft_energy_total =
     sum(accel_x_fft_energy, accel_y_fft_energy, accel_z_fft_energy);
 
   gyro_fft_energy_total  =
     sum(gyro_x_fft_energy,  gyro_y_fft_energy,  gyro_z_fft_energy);
 
+  /* centroid from dominant energy axis */
   if accel_x_fft_energy >= accel_y_fft_energy and accel_x_fft_energy >= accel_z_fft_energy then
     accel_fft_centroid_hz = accel_x_fft_centroid_hz;
   else if accel_y_fft_energy >= accel_x_fft_energy and accel_y_fft_energy >= accel_z_fft_energy then
@@ -201,11 +141,22 @@ data work.model_fft_4feature;
   else
     gyro_fft_centroid_hz = gyro_z_fft_centroid_hz;
 
-  keep event_id trip_id event_classifier event_type
-       is_aggressive_num
+  /* Keep only relevant variables for modeling */
+  keep event_id window_index event_type
+       is_aggressive 
        accel_fft_energy_total
        gyro_fft_energy_total
        accel_fft_centroid_hz
        gyro_fft_centroid_hz;
 run;
 
+/* Summary */
+proc sql;
+  select count(*) as n_rows_in_model
+  from work.model_fft_4feature_win;
+quit;
+
+proc sql;
+  select count(*) as n_distinct_windows
+  from (select distinct event_id, window_index from work.model_fft_4feature_win);
+quit;
