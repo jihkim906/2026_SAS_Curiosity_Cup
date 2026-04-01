@@ -44,7 +44,7 @@ Aggressive driving is primarily characterized by **strong and abrupt rotational 
 
 ## Contribution
 
-This project demonstrates that **frequency-domain modelling combined with mixed-effects logistic regressionS** can effectively translate raw smartphone sensor data into interpretable driving risk indicators.
+This project demonstrates that **frequency-domain modelling combined with mixed-effects logistic regression** can effectively translate raw smartphone sensor data into interpretable driving risk indicators.
 
 Unlike purely machine learning approaches, this framework provides direct interpretation of how rotational intensity and oscillatory dynamics influence aggressive driving probability, while maintaining strong predictive performance.
 
