@@ -1,0 +1,11 @@
+n_rows_in_model
+---------------
+              1
+n_distinct_windows
+------------------
+                 1
+
+       event_id  window_index          event_type  is_aggressive  accel_fft_energy_total  gyro_fft_energy_total  accel_fft_centroid_hz  gyro_fft_centroid_hz
+---------------  ------------  ------------------  -------------  ----------------------  ---------------------  ---------------------  --------------------
+T2_C3_S141_E143             1  Aggressive Braking              1          1574.317276052        2002.6073593971           3.1889207267          10.058300332
+

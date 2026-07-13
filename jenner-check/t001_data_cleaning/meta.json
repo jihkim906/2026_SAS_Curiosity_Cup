@@ -1,0 +1,7 @@
+{
+  "bundle": "t001_data_cleaning",
+  "source_file": "sas/01_data_cleaning.sas",
+  "source_blob_sha": "fd115fcae8ff283c5133ed931b3dcd1cb86c5e17",
+  "source_commit": "290207a5fc7dc4cecb900a2ec346a047d0c4843e",
+  "notes": "Data cleaning + event labeling + raw sliding windows: %ProcessTrip (event label mapping via the evento_clean if/else chain, accel+gyro merge by timestamp, seconds_from_start from uptimeNanos, the PROC SQL interval join labeling sensor rows), then the first.event_id raw-index DATA step and the sliding-window expansion (nwin = floor((n_rows-N)/HOP)+1) — all unchanged from the source. The three PROC IMPORT steps that read the trip CSVs from a shared path are replaced by inline DATA steps building the raw ground-truth/accel/gyro tables with the same column names (evento/inicio/fim; timestamp/uptimeNanos/x/y/z). Trimmed to one trip with one aggressive-braking event; window length N=16 HOP=4 (vs the pipeline's 128/10) so full windows form in the captured run. A closing quit; was added to the trailing PROC SQL."
+}

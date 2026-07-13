@@ -1,0 +1,157 @@
+
+NOTE: Option OBS changed to 100.
+NOTE: Option VALIDVARNAME changed to V7.
+NOTE: DATA work.longitudinal_fft_long
+
+
+NOTE: Wrote work.longitudinal_fft_long (64 rows, 11 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC SORT data=work.longitudinal_fft_long
+
+NOTE: Read 64 rows from work.longitudinal_fft_long.
+NOTE: Wrote work.longitudinal_fft_long (64 rows, 11 columns).
+NOTE: PROC SORT statement used.
+NOTE: PROC TRANSPOSE data=work.longitudinal_fft_long
+
+NOTE: Created 1 rows.
+NOTE: Output written to /tmp/work/r_de80d2b2e7fe4a65ba75eaa25ea028f1/work/24678b58-197a-4f73-b4e0-127a306bb95c/w_accel_x.avro.
+NOTE: PROC TRANSPOSE data=work.longitudinal_fft_long
+
+NOTE: Created 1 rows.
+NOTE: Output written to /tmp/work/r_de80d2b2e7fe4a65ba75eaa25ea028f1/work/24678b58-197a-4f73-b4e0-127a306bb95c/w_accel_y.avro.
+NOTE: PROC TRANSPOSE data=work.longitudinal_fft_long
+
+NOTE: Created 1 rows.
+NOTE: Output written to /tmp/work/r_de80d2b2e7fe4a65ba75eaa25ea028f1/work/24678b58-197a-4f73-b4e0-127a306bb95c/w_accel_z.avro.
+NOTE: PROC TRANSPOSE data=work.longitudinal_fft_long
+
+NOTE: Created 1 rows.
+NOTE: Output written to /tmp/work/r_de80d2b2e7fe4a65ba75eaa25ea028f1/work/24678b58-197a-4f73-b4e0-127a306bb95c/w_gyro_x.avro.
+NOTE: PROC TRANSPOSE data=work.longitudinal_fft_long
+
+NOTE: Created 1 rows.
+NOTE: Output written to /tmp/work/r_de80d2b2e7fe4a65ba75eaa25ea028f1/work/24678b58-197a-4f73-b4e0-127a306bb95c/w_gyro_y.avro.
+NOTE: PROC TRANSPOSE data=work.longitudinal_fft_long
+
+NOTE: Created 1 rows.
+NOTE: Output written to /tmp/work/r_de80d2b2e7fe4a65ba75eaa25ea028f1/work/24678b58-197a-4f73-b4e0-127a306bb95c/w_gyro_z.avro.
+NOTE: PROC SQL 
+
+NOTE: Table work.win_meta created.
+NOTE: PROC SQL statement used.
+NOTE: PROC SORT data=work.win_meta
+
+NOTE: Read 1 rows from work.win_meta.
+NOTE: Wrote work.win_meta (1 rows, 4 columns).
+NOTE: PROC SORT statement used.
+NOTE: PROC SORT data=work.w_accel_x
+
+NOTE: Read 1 rows from work.w_accel_x.
+NOTE: Wrote work.w_accel_x (1 rows, 66 columns).
+NOTE: PROC SORT statement used.
+NOTE: PROC SORT data=work.w_accel_y
+
+NOTE: Read 1 rows from work.w_accel_y.
+NOTE: Wrote work.w_accel_y (1 rows, 66 columns).
+NOTE: PROC SORT statement used.
+NOTE: PROC SORT data=work.w_accel_z
+
+NOTE: Read 1 rows from work.w_accel_z.
+NOTE: Wrote work.w_accel_z (1 rows, 66 columns).
+NOTE: PROC SORT statement used.
+NOTE: PROC SORT data=work.w_gyro_x
+
+NOTE: Read 1 rows from work.w_gyro_x.
+NOTE: Wrote work.w_gyro_x (1 rows, 66 columns).
+NOTE: PROC SORT statement used.
+NOTE: PROC SORT data=work.w_gyro_y
+
+NOTE: Read 1 rows from work.w_gyro_y.
+NOTE: Wrote work.w_gyro_y (1 rows, 66 columns).
+NOTE: PROC SORT statement used.
+NOTE: PROC SORT data=work.w_gyro_z
+
+NOTE: Read 1 rows from work.w_gyro_z.
+NOTE: Wrote work.w_gyro_z (1 rows, 66 columns).
+NOTE: PROC SORT statement used.
+NOTE: DATA work.win_wide
+
+NOTE: Stream 1 processed 1 rows, max BY-group size: 1 (O(1) memory verified)
+NOTE: Stream 2 processed 1 rows, max BY-group size: 1 (O(1) memory verified)
+NOTE: Stream 3 processed 1 rows, max BY-group size: 1 (O(1) memory verified)
+NOTE: Stream 4 processed 1 rows, max BY-group size: 1 (O(1) memory verified)
+NOTE: Stream 5 processed 1 rows, max BY-group size: 1 (O(1) memory verified)
+NOTE: Stream 6 processed 1 rows, max BY-group size: 1 (O(1) memory verified)
+NOTE: Stream 7 processed 1 rows, max BY-group size: 1 (O(1) memory verified)
+
+NOTE: Wrote work.win_wide (1 rows, 388 columns).
+NOTE: DATA elapsed:
+  wall  0.01 seconds
+  cpu   0.01 seconds
+NOTE: DATA work.win_wide
+
+
+NOTE: Read 1 rows from work.win_wide.
+NOTE: Wrote work.win_wide (1 rows, 390 columns).
+NOTE: DATA elapsed:
+  wall  0.02 seconds
+  cpu   0.02 seconds
+NOTE: DATA work.win_wide
+
+
+NOTE: Read 1 rows from work.win_wide.
+NOTE: Wrote work.win_wide (1 rows, 392 columns).
+NOTE: DATA elapsed:
+  wall  0.02 seconds
+  cpu   0.02 seconds
+NOTE: DATA work.win_wide
+
+
+NOTE: Read 1 rows from work.win_wide.
+NOTE: Wrote work.win_wide (1 rows, 394 columns).
+NOTE: DATA elapsed:
+  wall  0.02 seconds
+  cpu   0.02 seconds
+NOTE: DATA work.win_wide
+
+
+NOTE: Read 1 rows from work.win_wide.
+NOTE: Wrote work.win_wide (1 rows, 396 columns).
+NOTE: DATA elapsed:
+  wall  0.02 seconds
+  cpu   0.02 seconds
+NOTE: DATA work.win_wide
+
+
+NOTE: Read 1 rows from work.win_wide.
+NOTE: Wrote work.win_wide (1 rows, 398 columns).
+NOTE: DATA elapsed:
+  wall  0.02 seconds
+  cpu   0.02 seconds
+NOTE: DATA work.win_wide
+
+
+NOTE: Read 1 rows from work.win_wide.
+NOTE: Wrote work.win_wide (1 rows, 400 columns).
+NOTE: DATA elapsed:
+  wall  0.02 seconds
+  cpu   0.02 seconds
+NOTE: DATA work.model_fft_4feature_win
+
+
+NOTE: Read 1 rows from work.win_wide.
+NOTE: Wrote work.model_fft_4feature_win (1 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.01 seconds
+  cpu   0.01 seconds
+NOTE: PROC SQL 
+
+NOTE: PROC SQL statement used.
+NOTE: PROC SQL 
+
+NOTE: PROC SQL statement used.
+NOTE: PROC PRINT data=work.model_fft_4feature_win
+
+NOTE: PROC PRINT completed: 1 observations printed, 8 variables

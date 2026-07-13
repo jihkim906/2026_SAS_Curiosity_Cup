@@ -1,0 +1,7 @@
+{
+  "bundle": "t002_fft_features",
+  "source_file": "sas/02_feature_engineering.sas",
+  "source_blob_sha": "1295d8dd0738514ea1a229a416e688c35b83a958",
+  "source_commit": "290207a5fc7dc4cecb900a2ec346a047d0c4843e",
+  "notes": "FFT feature engineering: %ToWideEW (PROC TRANSPOSE) + %ComputeFFTEnergyCentroidEW (hand-coded DFT over an array x[0:N-1], spectral energy + spectral centroid) + centroid-from-dominant-axis DATA step, unchanged from the source. The upstream input dataset work.longitudinal_fft_long (produced by 01_data_cleaning.sas from the trip CSVs) is replaced here by a small deterministic generator: one labeled event, one window, fixed-frequency sinusoids. Window length N set to 64 (vs the pipeline's 128) so a full window fits the captured run; algorithm unchanged."
+}
