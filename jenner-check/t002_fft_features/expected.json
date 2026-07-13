@@ -1,0 +1,13 @@
+{
+  "_captured_at": "2026-07-13T03:52:00Z",
+  "_captured_run_id": "r_de80d2b2e7fe4a65ba75eaa25ea028f1",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: Wrote work.longitudinal_fft_long (64 rows, 11 columns).",
+    "NOTE: Table work.win_meta created.",
+    "NOTE: Option VALIDVARNAME changed to V7."
+  ],
+  "log_does_not_contain": ["ERROR:", "[JENNER-ERROR"],
+  "diagnostics": {"parse_warnings": [], "runtime_warnings": []}
+}

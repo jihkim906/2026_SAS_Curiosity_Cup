@@ -1,0 +1,13 @@
+{
+  "_captured_at": "2026-07-13T03:54:00Z",
+  "_captured_run_id": "r_0f89e4e7693543fcaa01b5cfcd52e1a0",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: Table work.events_1 created.",
+    "NOTE: Wrote work.master_event_data (30 rows, 11 columns).",
+    "NOTE: Table work.longitudinal_fft_long created."
+  ],
+  "log_does_not_contain": ["ERROR:", "[JENNER-ERROR"],
+  "diagnostics": {"parse_warnings": [], "runtime_warnings": []}
+}
